@@ -19,6 +19,17 @@ app.post('/login', async (c) => {
     return c.json({ status: 'ok' })
 })
 
+app.get('/todos', (c) => {
+    try {
+        const stmt = db.prepare('SELECT id, todo, created_at FROM todos ORDER BY id DESC')
+        const todos = stmt.all()
+
+        return c.json(todos)
+    } catch (err) {
+        return c.json({ error: err.message }, 500)
+    }
+})
+
 app.post('/insert', async (c) => {
     let body
     try {
